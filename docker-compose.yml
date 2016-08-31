@@ -1,0 +1,16 @@
+version: '2'
+services:
+    consul:
+        image: consul
+        hostname: consul
+        ports:
+          - "8400:8400"
+          - "8500:8500"
+          - "8600:8600"
+        command: "agent -dev -client=0.0.0.0 -ui"
+
+    microservice:
+        image: bytewood/ops/microservice:1
+        env_file:
+          - ./environment/microservice.env
+
