@@ -10,7 +10,7 @@ services:
         command: "agent -dev -client=0.0.0.0 -ui"
 
     microservice:
-        image: bytewood/ops/microservice:1
+        image: bytewood/ops/microservice:latest
         env_file:
           - ./environment/microservice.env
 
