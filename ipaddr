@@ -1,0 +1,4 @@
+#!/bin/bash
+network_interface=`netstat -r | awk '{print $3$8}' | grep -E ^0.0.0.0`
+echo $(ip -f inet -o addr show ${network_interface:7} | cut -d\  -f 7 | cut -d/ -f 1)
+
