@@ -4,9 +4,9 @@ services:
         image: ${REGISTRY_URL}/consul:latest
         hostname: consul
         ports:
-          - "8400:8400"
-          - "8500:8500"
-          - "8600:8600"
+            - "8400:8400"
+            - "8500:8500"
+            - "8600:8600"
         command: "agent -dev -client=0.0.0.0 -ui -log-level debug"
 
     microservice:
@@ -14,12 +14,22 @@ services:
         ports:
             - "8881:8881"
         env_file:
-          - ./environment/microservice.env
+            - ./environment/microservice.env
+        entrypoint:
+            - java
+            - -Dspring.profiles.active=consul
+            - -jar
+            - /app.jar
 
     microservice-a:
         image: ${REGISTRY_URL}/bytewood/ops/microservice-a:latest
         ports:
             - "8882:8882"
         env_file:
-          - ./environment/microservice-a.env
+            - ./environment/microservice-a.env
+        entrypoint:
+            - java
+            - -Dspring.profiles.active=consul
+            - -jar
+            - /app.jar
 
