@@ -7,15 +7,19 @@ services:
           - "8400:8400"
           - "8500:8500"
           - "8600:8600"
-        command: "agent -dev -client=0.0.0.0 -ui -log-level debug""
+        command: "agent -dev -client=0.0.0.0 -ui -log-level debug"
 
     microservice:
         image: ${REGISTRY_URL}/bytewood/ops/microservice:latest
+        ports:
+            - "8881:8881"
         env_file:
           - ./environment/microservice.env
 
     microservice-a:
         image: ${REGISTRY_URL}/bytewood/ops/microservice-a:latest
+        ports:
+            - "8882:8882"
         env_file:
           - ./environment/microservice-a.env
 
