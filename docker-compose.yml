@@ -1,7 +1,7 @@
 version: '2'
 services:
     consul:
-        image: localhost:5000/consul:latest
+        image: ${REGISTRY_URL}/consul:latest
         hostname: consul
         ports:
           - "8400:8400"
@@ -10,12 +10,12 @@ services:
         command: "agent -dev -client=0.0.0.0 -ui"
 
     microservice:
-        image: localhost:5000/bytewood/ops/microservice:latest
+        image: ${REGISTRY_URL}/bytewood/ops/microservice:latest
         env_file:
           - ./environment/microservice.env
 
     microservice-a:
-        image: localhost:5000/bytewood/ops/microservice-a:latest
+        image: ${REGISTRY_URL}/bytewood/ops/microservice-a:latest
         env_file:
           - ./environment/microservice-a.env
 
