@@ -10,11 +10,15 @@ services:
         command: "agent -dev -client=0.0.0.0 -ui -log-level debug"
 
     microservice:
-        image: ${REGISTRY_URL}/bytewood/ops/microservice:latest
+        depends_on:
+            - consul
+        image: ${REGISTRY_URL}/bytewood/ops-microservice:0.1.0.14
         ports:
             - "8881:8881"
         env_file:
             - ./environment/microservice.env
+        volumes:
+            - ./environment/uat:/config:ro
         entrypoint:
             - java
             - -Dspring.profiles.active=consul
@@ -22,7 +26,9 @@ services:
             - /app.jar
 
     microservice-a:
-        image: ${REGISTRY_URL}/bytewood/ops/microservice-a:latest
+        depends_on:
+            - consul
+        image: ${REGISTRY_URL}/bytewood/ops-microservice-a:0.1.0.3
         ports:
             - "8882:8882"
         env_file:
