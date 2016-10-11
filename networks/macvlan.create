@@ -1,0 +1,14 @@
+#!/bin/sh
+
+network_name="${1}"
+
+[ -z "$network_name" ] && exit 1
+
+docker network create \
+        -d macvlan \
+        --subnet=11.0.0.0/24 \
+        --gateway=11.0.0.1 \
+        -o ipvlan_mode=l2 \
+        -o parent=wlo1 \
+        "${network_name}"
+
