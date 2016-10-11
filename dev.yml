@@ -1,0 +1,47 @@
+version: '2'
+services:
+    consul:
+        image: ${REGISTRY_URL}/consul:latest
+        hostname: consul
+        ports:
+            - "8400:8400"
+            - "8500:8500"
+            - "8600:8600"
+        command: "agent -dev -client=0.0.0.0 -ui -log-level debug"
+
+    microservice:
+        image: bytewood/ops-gradle:latest
+        ports:
+            - "8881:8080"
+        env_file:
+            - ./environment/microservice.env
+        volumes:
+            - "/media/data/projects/bytewood/ops/microservice:/app"
+            - "/home/peter/.gradle:/root/.gradle"
+        working_dir: /app
+        extra_hosts: 
+            - "artifactory:10.9.38.34"
+        entrypoint:
+            - "gradle"
+            - "--offline"
+            - "-PSPRING_PROFILES_ACTIVE=consul"
+            - "bootRun"
+    microservice-a:
+        depends_on:
+            - consul
+        image: ${REGISTRY_URL}/bytewood/ops-microservice-a:0.1.0.17
+        ports:
+            - "8882:8882"
+        env_file:
+            - ./environment/microservice-a.env
+        entrypoint:
+            - "./waitfor.sh"
+            - "consul"
+            - "8500"
+            - "java"
+            - "-jar"
+            - "/app.jar"
+            - "--spring.profiles.active=consul"
+            - "--debug"
+
+
