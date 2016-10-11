@@ -10,32 +10,41 @@ services:
         command: "agent -dev -client=0.0.0.0 -ui -log-level debug"
 
     microservice:
-        depends_on:
-            - consul
-        image: ${REGISTRY_URL}/bytewood/ops-microservice:0.1.0.14
+        image: ${REGISTRY_URL}/bytewood/ops-microservice:0.1.0.25
         ports:
             - "8881:8881"
         env_file:
             - ./environment/microservice.env
         volumes:
-            - ./environment/uat:/config:ro
+            - ./environment/uat/_scripts:/scripts
+            - ./environment/uat/microservice:/config
         entrypoint:
-            - java
-            - -Dspring.profiles.active=consul
-            - -jar
-            - /app.jar
-
+            - "scripts/waitfor.sh"
+            - "consul"
+            - "8500"
+            - "java"
+            - "-jar"
+            - "app.jar"
+            - "--spring.config.location=file:/config/"
+            - "--spring.profiles.active=consul"
     microservice-a:
         depends_on:
             - consul
-        image: ${REGISTRY_URL}/bytewood/ops-microservice-a:0.1.0.3
+        image: ${REGISTRY_URL}/bytewood/ops-microservice-a:0.1.0.17
         ports:
             - "8882:8882"
         env_file:
             - ./environment/microservice-a.env
+        volumes:
+            - ./environment/uat/_scripts:/scripts
         entrypoint:
-            - java
-            - -Dspring.profiles.active=consul
-            - -jar
-            - /app.jar
+            - "scripts/waitfor.sh"
+            - "consul"
+            - "8500"
+            - "java"
+            - "-jar"
+            - "/app.jar"
+            - "--spring.profiles.active=consul"
+            - "--debug"
+
 
