@@ -4,10 +4,31 @@ services:
         image: ${REGISTRY_URL}/consul:latest
         hostname: consul
         ports:
-            - "8400:8400"
             - "8500:8500"
-            - "8600:8600"
-        command: "agent -dev -client=0.0.0.0 -ui -log-level debug"
+        command: "agent -dev -client=0.0.0.0 -ui"
+
+    logstash:
+        image: logstash
+        ports:
+            - "9100:9100"
+        volumes:
+            - ./logstash:/config
+        command: [ -f /config/syslog-to-elastic.conf ]
+
+    elastic:
+        image: elasticsearch
+        ports:
+            - "9200:9200"
+            - "9300:9300"
+        volumes:
+            - /data:/usr/share/elasticsearch/data
+    
+    kibana:
+        depends_on:
+            - elastic
+        image: kibana
+        ports:
+            - "5601:5601"
 
     microservice:
         image: ${REGISTRY_URL}/bytewood/ops-microservice:0.1.0.25
