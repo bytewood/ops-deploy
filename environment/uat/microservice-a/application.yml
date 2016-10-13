@@ -1,0 +1,10 @@
+management:
+    contextPath: /system
+spring:
+  application:
+    name: microservice-a
+server:
+  port: 8080
+  contextPath: /
+abc:
+  abc: "${ABC:pqr}"
