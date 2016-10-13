@@ -1,5 +1,5 @@
 management:
-    contextPath: /system
+  contextPath: /system
 spring:
   application:
     name: microservice-a

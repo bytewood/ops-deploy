@@ -31,18 +31,15 @@ services:
             - "5601:5601"
 
     microservice:
-        image: ${REGISTRY_URL}/bytewood/ops-microservice:0.1.0.25
+        image: ${REGISTRY_URL}/bytewood/ops-microservice:0.1.0.27
         ports:
-            - "8881:8881"
+            - "8881:8080"
         env_file:
             - ./environment/microservice.env
         volumes:
             - ./environment/uat/_scripts:/scripts
             - ./environment/uat/microservice:/config
         entrypoint:
-            - "scripts/waitfor.sh"
-            - "consul"
-            - "8500"
             - "java"
             - "-jar"
             - "app.jar"
@@ -51,21 +48,19 @@ services:
     microservice-a:
         depends_on:
             - consul
-        image: ${REGISTRY_URL}/bytewood/ops-microservice-a:0.1.0.17
+        image: ${REGISTRY_URL}/bytewood/ops-microservice-a:0.1.0.18
         ports:
-            - "8882:8882"
+            - "8882:8080"
         env_file:
             - ./environment/microservice-a.env
         volumes:
             - ./environment/uat/_scripts:/scripts
+            - ./environment/uat/microservice-a:/config
         entrypoint:
-            - "scripts/waitfor.sh"
-            - "consul"
-            - "8500"
             - "java"
             - "-jar"
             - "/app.jar"
+            - "--spring.config.location=file:/config/"
             - "--spring.profiles.active=consul"
-            - "--debug"
 
 

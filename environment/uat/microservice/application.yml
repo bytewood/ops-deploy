@@ -1,16 +1,16 @@
 management:
-    contextPath: /system
+  contextPath: /system
 spring:
   application:
     name: microservice
 server:
-  port: 8881
+  port: 8080
   contextPath: /
 abc:
   abc: "${ABC:abc}"
 microservice-a:
   protocol: http
-  ip: localhost
-  port: 8882
-  context: /api/0.1
+  ip: microservice-a
+  port: 8080
+  context: /
 
