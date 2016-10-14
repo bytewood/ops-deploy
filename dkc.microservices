@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+alias dkc='docker-compose -f docker-compose.yml -f docker-compose.microservices'
+

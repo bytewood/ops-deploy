@@ -1,0 +1,50 @@
+version: '2'
+services:
+    microservice:
+        depends_on:
+            - consul
+            - logstash
+        image: ${REGISTRY_URL}/bytewood/ops-microservice:0.1.0.27
+        logging:
+          driver: syslog
+          options:
+            syslog-address: "tcp://logstash:9100"
+            tag: microservice
+        ports:
+            - "8881:8080"
+        env_file:
+            - ./environment/microservice.env
+        volumes:
+            - ./environment/uat/_scripts:/scripts
+            - ./environment/uat/microservice:/config
+        entrypoint:
+            - "java"
+            - "-jar"
+            - "app.jar"
+            - "--spring.config.location=file:/config/"
+            - "--spring.profiles.active=consul"
+    microservice-a:
+        depends_on:
+            - consul
+            - logstash
+        logging:
+          driver: syslog
+          options:
+            syslog-address: "tcp://logstash:9100"
+            tag: microservice-a
+        image: ${REGISTRY_URL}/bytewood/ops-microservice-a:0.1.0.18
+        ports:
+            - "8882:8080"
+        env_file:
+            - ./environment/microservice-a.env
+        volumes:
+            - ./environment/uat/_scripts:/scripts
+            - ./environment/uat/microservice-a:/config
+        entrypoint:
+            - "java"
+            - "-jar"
+            - "/app.jar"
+            - "--spring.config.location=file:/config/"
+            - "--spring.profiles.active=consul"
+
+
