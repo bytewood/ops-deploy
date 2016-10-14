@@ -21,7 +21,7 @@ services:
         command: [ "-f", "/config/syslog-to-elastic.conf" ]
 
     elastic:
-        image: elasticsearch
+        image: elastic-marvel
         ports:
             - "9200:9200"
             - "9300:9300"
@@ -31,7 +31,7 @@ services:
     kibana:
         depends_on:
             - elastic
-        image: kibana
+        image: kibana-marvel
         ports:
             - "5601:5601"
         environment:
