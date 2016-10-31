@@ -1,13 +1,21 @@
 version: '2'
 services:
     microservice:
+        depends_on:
+            - consul
+        logging:
+          driver: syslog
+          options:
+            syslog-address: "tcp://logstash:9100"
+            tag: microservice
         image: bytewood/ops-gradle:latest
         ports:
             - "8881:8881"
         env_file:
-            - ../environment/microservice.env
+            - ./environment/microservice.env
         volumes:
-            - "/media/data/projects/bytewood/ops/microservice:/app"
+            - "../microservice:/app"
+            - "./environment/uat/microservice:/config"
             - "/home/peter/.gradle:/root/.gradle"
         working_dir: /app
         extra_hosts: 
@@ -16,18 +24,27 @@ services:
             - "gradle"
             - "--offline"
             - "-PSPRING_PROFILES_ACTIVE=consul"
+            - "-PSPRING_CONFIG_LOCATION=file:/config/"
             - "bootRun"
     microservice-a:
         depends_on:
             - consul
+        logging:
+          driver: syslog
+          options:
+            syslog-address: "tcp://logstash:9100"
+            tag: microservice-a
         image: ${REGISTRY_URL}/bytewood/ops-microservice-a:0.1.0.18
         ports:
             - "8882:8882"
+        volumes:
+            - ./environment/uat/microservice-a:/config
         entrypoint:
             - java
             - -jar
             - /app.jar
             - --spring.profiles.active=consul
+            - --spring.config.location=file:/config/
             - --debug
 
 

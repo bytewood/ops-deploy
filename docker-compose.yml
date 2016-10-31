@@ -18,7 +18,7 @@ services:
             - "9100:9100"
         volumes:
             - ./logstash:/config
-        command: [ "-f", "/config/syslog-to-elastic.conf" ]
+        command: [ "-f", "/config/syslog-to-elastic.conf", "--auto-reload" ]
 
     elastic:
         image: elastic-marvel
