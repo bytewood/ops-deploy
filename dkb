@@ -1,0 +1,6 @@
+#!/bin/sh
+
+microservice=$1
+
+dkc stop $microservice && dkc rm $microservice && dkc up -d $microservice
+
