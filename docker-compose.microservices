@@ -4,12 +4,12 @@ services:
         depends_on:
             - consul
             - logstash
-        image: ${REGISTRY_URL}/bytewood/ops-microservice:0.1.0.27
+        image: ${REGISTRY_URL}/bytewood/ops-microservice:0.1.0.32
         logging:
           driver: syslog
           options:
             syslog-address: "tcp://logstash:9100"
-            tag: microservice
+            tag: "{{.Name}}|{{.FullID}}|{{.ImageName}}|{{.ImageFullID}}"
         ports:
             - "8881:8080"
         env_file:
@@ -31,8 +31,8 @@ services:
           driver: syslog
           options:
             syslog-address: "tcp://logstash:9100"
-            tag: microservice-a
-        image: ${REGISTRY_URL}/bytewood/ops-microservice-a:0.1.0.18
+            tag: "{{.Name}}|{{.FullID}}|{{.ImageName}}|{{.ImageFullID}}"
+        image: ${REGISTRY_URL}/bytewood/ops-microservice-a:0.1.0.21
         ports:
             - "8882:8080"
         env_file:

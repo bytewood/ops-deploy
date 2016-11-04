@@ -1,37 +1,35 @@
 version: '2'
 services:
     consul:
-        image: ${REGISTRY_URL}/consul:latest
+        image: ${REGISTRY_URL}/consul:0.7.0
         hostname: consul
         ports:
             - "8500:8500"
         command: "agent -dev -client=0.0.0.0 -ui"
-        logging:
-          driver: syslog
-          options:
-            syslog-address: "tcp://logstash:9100"
-            tag: consulate
 
     logstash:
-        image: logstash
+        depends_on:
+            - elastic
+        image: logstash:2.4.0-1
         ports:
             - "9100:9100"
         volumes:
             - ./logstash:/config
-        command: [ "-f", "/config/syslog-to-elastic.conf", "--auto-reload" ]
+            - ./logstash/patterns:/patterns
+        command: [ "-f", "/config/syslog-to-elastic.conf" ]
 
     elastic:
-        image: elastic-marvel
+        image: elasticsearch:5.0.0
         ports:
             - "9200:9200"
             - "9300:9300"
         volumes:
-            - /data:/usr/share/elasticsearch/data
+            - /data/elasticsearch:/usr/share/elasticsearch/data
     
     kibana:
         depends_on:
             - elastic
-        image: kibana-marvel
+        image: kibana:5.0.0
         ports:
             - "5601:5601"
         environment:
