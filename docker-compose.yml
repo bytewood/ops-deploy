@@ -10,7 +10,7 @@ services:
     logstash:
         depends_on:
             - elastic
-        image: logstash:2.4.0-1
+        image: logstash:5.0.0
         ports:
             - "9100:9100"
         volumes:
