@@ -1,3 +1,3 @@
-SYSLOG_TAGS %{DATA:container_name}\|%{DATA:container_uuid}\|%{DATA:image_name}\|%{DATA:image_uuid}
+SYSLOG_TAGS %{DATA:container_application}\|%{DATA:container_name}\|%{DATA:container_uuid}\|%{DATA:image_name}\|%{DATA:image_uuid}
 SYSLOG_CLIENT_ID \[%{DATA:syslog_client_id}\]
 SYSLOG_HEADER <%{POSINT:syslog_pri}>%{SPACE}%{SYSLOGTIMESTAMP:syslog_timestamp}%{SPACE}%{SYSLOG_TAGS}%{SYSLOG_CLIENT_ID}%{COLON}%{SPACE}

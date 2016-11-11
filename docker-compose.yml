@@ -14,9 +14,11 @@ services:
         ports:
             - "9100:9100"
         volumes:
-            - ./logstash:/config
+            - ./logstash/config:/config
             - ./logstash/patterns:/patterns
-        command: [ "-f", "/config/syslog-to-elastic.conf" ]
+        environment:
+            LS_SETTINGS_DIR: /config
+        command: [ "-f", "/config/syslog-to-elastic.conf", "--log.level", "info" ]
 
     elastic:
         image: elasticsearch:5.0.0
