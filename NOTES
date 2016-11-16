@@ -1,40 +1,21 @@
 
 
 # elasticsearch 5
-sysctl -w vm.max_map_count=262144
-
+sudo sysctl -w vm.max_map_count=262144
 
 ###/etc/sysctl.conf
 
-    elastic:
-        image: elasticsearch
-        ports:
-            - "9200:9200"
-            - "9300:9300"
-        environment:
-            ES_JAVA_OPTS: "-Xms1g -Xmx1g"
-        volumes:
-            - /data:/usr/share/elasticsearch/data
-
-
-# consul 0.7.0
-        logging:
-          driver: syslog
-          options:
-            syslog-address: "tcp://logstash:9100"
-            tag: "{{.Name}}/{{.FullID}}/{{.ImageName}}/{{.ImageFullID}}"
-            labels: "consul"
-
-# microservices
-
-            tag: "{{.Name}}/{{.FullID}}/{{.ImageName}}/{{.ImageFullID}}"
-
-
 # logstash
+http://grokconstructor.appspot.com/do/match
+
 ## example logline
 <30>Nov 4 16:12:41 deploy_microservice-a_1|4fbcf83e8059eb226c5c4e2fb7f19d2be762eb9634bdb731499eb0db6ce8206b|localhost:5000/bytewood/ops-microservice-a:0.1.0.21|sha256:deb579293e092b8c3c42c340d7ce8ce8d4d2222dc07a609b203701d6e5d5d4aa[7902]: 2016-11-04 14:12:41.552 INFO 1 --- [ XNIO-2 task-1] o.s.web.servlet.DispatcherServlet : FrameworkServlet 'dispatcherServlet': initialization started, FrameworkServlet 'dispatcherServlet': initialization started
 
 ## grok filter for line above
 ^<%{POSINT:syslog_pri}>%{SPACE}%{SYSLOGTIMESTAMP:syslog_timestamp}%{SPACE}%{DATA:container_name}\|%{DATA:container_uuid}\|%{DATA:image_name}\|%{DATA:image_uuid}\[%{DATA:syslog_thread_id}\](?<colon>\:)%{SPACE}%{TIMESTAMP_ISO8601:logtime}%{SPACE}%{LOGLEVEL:loglevel}%{SPACE}%{NUMBER:pid}%{SPACE}(?<separator>---)%{SPACE}(?<thread_name>\[.*?\])%{SPACE}%{JAVACLASS:javaclass}(?<whitespace>.*?)(?<colon>\:)%{SPACE}%{JAVALOGMESSAGE:message}$
+
+
+## nginx example logline
+<30>Nov 14 11:40:42 nginx|deploy_nginx_1|e1828bfe75d1ef3fc662f9438c222a3cf712d8c7d3f7f036f9e211c0fde78827|nginx:1.10.2-alpine|sha256:501d2ca4f2e2d86c3c624cfa6720ac5044593e9c24e00d0a466afce21043017b[1119]: 172.20.0.1 - - [14/Nov/2016:09:40:42 +0000] "GET /microservice/echo?message=a2 HTTP/1.1" 200 145 "-" "curl/7.47.0"
 
 
