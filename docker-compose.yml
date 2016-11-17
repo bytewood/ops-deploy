@@ -1,11 +1,18 @@
 version: '2'
 services:
     consul:
+        depends_on:
+            - logstash
         image: ${REGISTRY_URL}/consul:0.7.0
         hostname: consul
+        logging:
+          driver: syslog
+          options:
+            syslog-address: "tcp://logstash:9102"
+            tag: "consul|{{.Name}}|{{.FullID}}|{{.ImageName}}|{{.ImageFullID}}"
         ports:
             - "8500:8500"
-        command: "agent -dev -client=0.0.0.0 -ui"
+        command: "agent -dev -client=0.0.0.0 -ui -log-level info"
 
     logstash:
         depends_on:
@@ -14,12 +21,13 @@ services:
         ports:
             - "9100:9100"
             - "9101:9101"
+            - "9102:9102"
         volumes:
             - ./logstash/config:/config
             - ./logstash/patterns:/patterns
         environment:
             LS_SETTINGS_DIR: /config
-        command: [ "-f", "/config/syslog-to-elastic.conf", "-r", "--log.level", "debug" ]
+        command: [ "-f", "/config/syslog-to-elastic.conf", "-r", "--log.level", "info" ]
 
     elastic:
         image: elasticsearch:5.0.0
