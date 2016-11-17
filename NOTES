@@ -18,4 +18,6 @@ http://grokconstructor.appspot.com/do/match
 ## nginx example logline
 <30>Nov 14 11:40:42 nginx|deploy_nginx_1|e1828bfe75d1ef3fc662f9438c222a3cf712d8c7d3f7f036f9e211c0fde78827|nginx:1.10.2-alpine|sha256:501d2ca4f2e2d86c3c624cfa6720ac5044593e9c24e00d0a466afce21043017b[1119]: 172.20.0.1 - - [14/Nov/2016:09:40:42 +0000] "GET /microservice/echo?message=a2 HTTP/1.1" 200 145 "-" "curl/7.47.0"
 
+## consul 
+2016/11/16 11:29:09 [DEBUG] agent: Node info in sync
 
