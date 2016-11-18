@@ -10,8 +10,6 @@ services:
           options:
             syslog-address: "tcp://logstash:9100"
             tag: "springboot|{{.Name}}|{{.FullID}}|{{.ImageName}}|{{.ImageFullID}}"
-        ports:
-            - "8881:8080"
         env_file:
             - ./environment/microservice.env
         volumes:
@@ -33,8 +31,6 @@ services:
             syslog-address: "tcp://logstash:9100"
             tag: "springboot|{{.Name}}|{{.FullID}}|{{.ImageName}}|{{.ImageFullID}}"
         image: ${REGISTRY_URL}/bytewood/ops-microservice-a:0.1.0.21
-        ports:
-            - "8882:8080"
         env_file:
             - ./environment/microservice-a.env
         volumes:
