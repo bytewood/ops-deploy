@@ -7,5 +7,8 @@ spring:
         healthCheckPath: ${management.contextPath}/health
         healthCheckInterval: 15s
         instanceId: ${spring.application.name}:${HOSTNAME:${random.value}}
-      config:
-        failFast: true
+      retry:
+        initialInterval: 3000
+        maxInterval: 15000
+        maxAttempts: 30
+
