@@ -8,3 +8,6 @@ server:
   contextPath: /
 abc:
   abc: "${ABC:pqr}"
+logging:
+  file: /data/logs/${spring.application.name}.log
+
