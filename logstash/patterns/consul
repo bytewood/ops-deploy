@@ -1,2 +1,2 @@
 CONSUL_DATE %{YEAR}/%{MONTHNUM}/%{MONTHDAY}%{SPACE}%{TIME}
-CONSUL_LOG %{CONSUL_DATE:log_time}%{SPACE}\[%{LOGLEVEL:log_level}\]%{SPACE}%{WORD:container_application}:%{SPACE}%{GREEDYDATA:consul_message}
+CONSUL_LOG %{CONSUL_DATE:log_time}%{SPACE}\[%{LOGLEVEL:log_level}\]%{SPACE}%{WORD:container_application}:%{SPACE}%{GREEDYDATA:log_message}
