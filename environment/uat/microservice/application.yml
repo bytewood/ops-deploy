@@ -14,5 +14,4 @@ microservice-a:
   port: 8080
   context: /
 logging:
-  file: /data/logs/${spring.application.name}.log
-
+    file: /logs/${spring.application.name}.log

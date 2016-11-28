@@ -1,0 +1,13 @@
+filebeat.prospectors:
+- input_type: log
+  paths:
+    - /var/log/*.log
+
+  #multiline.pattern: ^\[
+  #multiline.negate: false
+  #multiline.match: after
+output.elasticsearch:
+  hosts: ["elastic:9200"]
+#output.logstash:
+  # The Logstash hosts
+  #hosts: ["localhost:5044"]

@@ -1,0 +1,13 @@
+filebeat.prospectors:
+- input_type: log
+  paths:
+    - /var/log/*.log
+    - /var/log/consul/*.log
+    - /var/log/nginx/*.log
+  multiline.pattern: '^[0-9]{4}-'
+  multiline.negate: true
+  multiline.match: after
+
+output.logstash:
+    hosts: ["logstash:9100"]
+

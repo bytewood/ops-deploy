@@ -1,0 +1,11 @@
+#!/bin/sh
+
+sudo rm -r /data/elasticsearch/nodes
+sudo rm -r /data/logs/*
+
+sudo mkdir -p /data/logs/nginx
+sudo mkdir -p /data/logs/consul
+
+sudo chmod 777 /data/logs/nginx
+sudo chmod 777 /data/logs/consul
+

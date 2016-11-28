@@ -1,41 +1,32 @@
 version: '2'
 services:
+
     microservice:
-        depends_on:
-            - consul
-            - logstash
         image: ${REGISTRY_URL}/bytewood/ops-microservice:0.1.0.32
-        logging:
-          driver: syslog
-          options:
-            syslog-address: "tcp://logstash:9100"
-            tag: "springboot|{{.Name}}|{{.FullID}}|{{.ImageName}}|{{.ImageFullID}}"
         env_file:
             - ./environment/microservice.env
         volumes:
+            - /data/logs:/logs:rw
             - ./environment/uat/_scripts:/scripts
             - ./environment/uat/microservice:/config
+            - ./environment/uat/common/logback-spring.xml:/config/logback-spring.xml
         entrypoint:
             - "java"
             - "-jar"
             - "app.jar"
+            - "--logging.config=file:/config/logback-spring.xml"
             - "--spring.config.location=file:/config/"
             - "--spring.profiles.active=consul"
+
     microservice-a:
-        depends_on:
-            - consul
-            - logstash
-        logging:
-          driver: syslog
-          options:
-            syslog-address: "tcp://logstash:9100"
-            tag: "springboot|{{.Name}}|{{.FullID}}|{{.ImageName}}|{{.ImageFullID}}"
         image: ${REGISTRY_URL}/bytewood/ops-microservice-a:0.1.0.21
         env_file:
             - ./environment/microservice-a.env
         volumes:
+            - /data/logs:/logs:rw
             - ./environment/uat/_scripts:/scripts
             - ./environment/uat/microservice-a:/config
+            - ./environment/uat/common/logback-spring.xml:/config/logback-spring.xml
         entrypoint:
             - "java"
             - "-jar"
@@ -44,17 +35,10 @@ services:
             - "--spring.profiles.active=consul"
 
     nginx:
-        depends_on:
-            - microservice
-            - microservice-a
-        logging:
-          driver: syslog
-          options:
-            syslog-address: "tcp://logstash:9101"
-            tag: "nginx|{{.Name}}|{{.FullID}}|{{.ImageName}}|{{.ImageFullID}}"
         image: nginx:1.10.2-alpine
         ports:
             - "8888:80"
         volumes:
+            - /data/logs:/var/log
             - ./nginx/etc/nginx.conf:/etc/nginx/nginx.conf
 

@@ -1,0 +1,19 @@
+ 
+$ docker pull golang:alpine
+ 
+$ cd $WORK
+$ mkdir -p github.com/elastic
+$ cd github.com/elastic/
+$ git clone https://github.com/elastic/beats.git
+$ docker run -it --name=goalpinemake golang:alpine /bin/ash
+ 
+/go # apk update
+/go # apk add make
+/go # apk add bash
+/go # exit
+ 
+$ docker commit -m "Added make and bash" -a "Bytewood" goalpinemake golang:alpine-make
+ 
+$ cd $WORK
+$ docker run --rm -v "$PWD":/go/src -w /go/src/github.com/elastic/beats/filebeat golang:alpine-make /bin/ash -c make
+

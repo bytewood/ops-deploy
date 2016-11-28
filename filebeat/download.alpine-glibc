@@ -1,0 +1,10 @@
+#!/bin/sh
+GLIBC_VERSION=2.23-r3
+GLIBC_APK=glibc-$GLIBC_VERSION.apk
+GLIBC_BIN_APK=glibc-bin-$GLIBC_VERSION.apk
+GLIBC_i18n_APK=glibc-i18n-$GLIBC_VERSION.apk
+wget -O .ssh/sgerrand.rsa.pub https://raw.githubusercontent.com/sgerrand/alpine-pkg-glibc/master/sgerrand.rsa.pub
+wget -O $GLIBC_APK https://github.com/sgerrand/alpine-pkg-glibc/releases/download/$GLIBC_VERSION/$GLIBC_APK 
+wget -O $GLIBC_BIN_APK https://github.com/sgerrand/alpine-pkg-glibc/releases/download/$GLIBC_VERSION/$GLIBC_BIN_APK 
+wget -O $GLIBC_i18n_APK https://github.com/sgerrand/alpine-pkg-glibc/releases/download/$GLIBC_VERSION/$GLIBC_i18n_APK 
+

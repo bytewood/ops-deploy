@@ -1,22 +1,15 @@
 version: '2'
 services:
     consul:
-        depends_on:
-            - logstash
         image: ${REGISTRY_URL}/consul:0.7.0
         hostname: consul
-        logging:
-          driver: syslog
-          options:
-            syslog-address: "tcp://logstash:9102"
-            tag: "consul|{{.Name}}|{{.FullID}}|{{.ImageName}}|{{.ImageFullID}}"
+        volumes:
+            - /data/logs/consul:/logs:rw
         ports:
             - "8500:8500"
-        command: "agent -dev -client=0.0.0.0 -ui -log-level info"
+        command: "agent -dev -client=0.0.0.0 -ui -log-level info "
 
     logstash:
-        depends_on:
-            - elastic
         image: logstash:5.0.0
         ports:
             - "9100:9100"
@@ -27,7 +20,7 @@ services:
             - ./logstash/patterns:/patterns
         environment:
             LS_SETTINGS_DIR: /config
-        command: [ "-f", "/config/syslog-to-elastic.conf", "-r", "--log.level", "info" ]
+        command: [ "-f", "/config/logstash-filebeat.conf", "-r", "--log.level", "info" ]
 
     elastic:
         image: elasticsearch:5.0.0
@@ -38,11 +31,20 @@ services:
             - /data/elasticsearch:/usr/share/elasticsearch/data
     
     kibana:
-        depends_on:
-            - elastic
         image: kibana:5.0.0
         ports:
             - "5601:5601"
         environment:
             ELASTICSEARCH_URL: http://elastic:9200
+
+    filebeat:
+        image: bytewood/filebeat:5.0.0
+        volumes:
+            - /data/logs:/var/log
+            - ./filebeat/etc/filebeat-logstash.yml:/etc/filebeat.yml
+        entrypoint:
+            - filebeat
+            - -c
+            - /etc/filebeat.yml
+        
 

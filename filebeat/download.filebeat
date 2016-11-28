@@ -1,0 +1,5 @@
+#!/bin/sh
+URL="https://artifacts.elastic.co/downloads/beats/filebeat"
+FILEBEAT_TAR="filebeat-5.0.0-linux-x86_64.tar.gz"
+wget -O "$FILEBEAT_TAR" "$URL/$FILEBEAT_TAR"
+
